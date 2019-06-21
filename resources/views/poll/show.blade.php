@@ -3,6 +3,7 @@
 @section('content')
 <h1>{{$poll->title}}</h1>
 
+
 <form method="post" action="{{action('VoteController@store')}}">
     @csrf
     <div class="container">
@@ -19,7 +20,7 @@
     <button type="submit" class="btn btn-primary">Submit</button>
     </div>
 </form>
-
+<br>
 <div class="container">
     @foreach ($poll->questions as $question)
         <div class="form-group">

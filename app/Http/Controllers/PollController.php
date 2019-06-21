@@ -54,7 +54,12 @@ class PollController extends Controller
     public function show($id)
     {
         $poll = Poll::find($id);
-        return view('poll/show', compact('poll'));
+        $ifVote = Vote::where('user_id', \Auth::user()->id)->where('option_id', $poll->questionOption()->pluck('options.id'))->count();
+
+        //return $ifVote;
+    
+
+        return view('poll/show', compact('poll','ifVote'));
     }
 
     /**
