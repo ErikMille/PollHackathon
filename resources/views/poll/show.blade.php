@@ -42,17 +42,8 @@
 </form><br>
 @endif
 
-
-
-<div class="container">
-    @foreach ($poll->questions as $question)
-        <div class="form-group">
-            <label><h4>{{$question->text}}</h4></label>
-              @foreach ($question->options as $option)
-              <p>{{$option->text}} Votes: {{$option->votes()->count()}}</p>
-              @endforeach
-        </div>
-    @endforeach
-</div>
+@if((\Auth::user())&&(($poll->user_id == \Auth::user()->id)||(App\Vote::where('user_id', \Auth::user()->id)->whereIn('option_id', $poll->questionOption()->pluck('options.id'))->count())))
+@include('poll.owner')
+@endif
 
 @endsection
