@@ -82,8 +82,17 @@ class VoteController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $id)
-    {
-        //
+    {   
+        $poll = Poll::find($id);
+        $user_id=\Auth::user()->id;
+        foreach ($request->option_id as $option_id) {
+            $option=Option::find($option_id);
+            $question=$option->question;
+            $vote=Vote::where('user_id',$user_id)->whereIn('option_id',$question->options->pluck('id'))->first();
+            $vote->option_id = $option_id;
+            $vote-> save();
+        }
+        return redirect(action('PollController@show', [$poll->id]));
     }
 
     /**
