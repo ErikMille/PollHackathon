@@ -20,6 +20,8 @@ class PollController extends Controller
     public function index()
     {
         //
+        $polls = Poll::all();
+        return view('/poll/index',compact('polls'));
     }
 
     /**
@@ -51,7 +53,8 @@ class PollController extends Controller
      */
     public function show($id)
     {
-        //
+        $poll = Poll::find($id);
+        return view('poll/show', compact('poll'));
     }
 
     /**

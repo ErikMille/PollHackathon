@@ -41,7 +41,14 @@ class VoteController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        foreach ($request->option_id as $option_id) {
+            $newVote = new Vote;
+            $newVote->user_id = \Auth::user()->id;
+            $newVote->option_id = $option_id;
+            $newVote-> save();
+        }  
+        $option = Option::find($request->option_id[0]); 
+        return redirect(action('PollController@show', [$option->question->poll->id]));
     }
 
     /**
@@ -53,6 +60,7 @@ class VoteController extends Controller
     public function show($id)
     {
         //
+        
     }
 
     /**

@@ -17,7 +17,11 @@ Route::get('/', function () {
 
 Auth::routes();
 
-Route::resource('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home');
 
-Route::resource('/poll', 'PollController');
+Route::resource('poll', 'PollController');
+
+Route::resource('vote', 'VoteController');
+
+//Route::resource('/', 'PollController');
 
