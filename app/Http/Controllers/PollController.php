@@ -32,6 +32,7 @@ class PollController extends Controller
     public function create()
     {
         //
+        return view('poll/create');
     }
 
     /**
@@ -42,7 +43,24 @@ class PollController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        //return $request->questions;
+        $newpoll = new Poll;
+        $newpoll->title = $request->title;
+        $newpoll->user_id = \Auth::user()->id;
+        $newpoll->save();
+        foreach ($request->questions as $question_id => $question) {
+            $newquestion = new Question;
+            $newquestion->text = $question;
+            $newquestion->poll_id = $newpoll->id;
+            $newquestion->save();
+            foreach ($request->options[$question_id] as $option) {
+                $newoption = new Option;
+                $newoption->text = $option;
+                $newoption->question_id = $newquestion->id;
+                $newoption->save();
+            }
+        }
+        redirect(action('PollController@index'));
     }
 
     /**
@@ -56,7 +74,7 @@ class PollController extends Controller
         $poll = Poll::find($id);
         $ifVote=0;
         if(\Auth::user()){
-        $ifVote = Vote::where('user_id', \Auth::user()->id)->where('option_id', $poll->questionOption()->pluck('options.id'))->count();
+        $ifVote = Vote::where('user_id', \Auth::user()->id)->whereIn('option_id', $poll->questionOption()->pluck('options.id'))->count();
         }
         return view('poll/show', compact('poll','ifVote'));
     }
